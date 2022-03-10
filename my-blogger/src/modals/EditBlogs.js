@@ -8,7 +8,6 @@ export const EditBlogs = ({ modal, toggle, updateTask, blogObj }) => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-
     if (name === "blogTitle") {
       setBlogTitle(value);
     } else if (name == "blogWriter") {
@@ -42,7 +41,7 @@ export const EditBlogs = ({ modal, toggle, updateTask, blogObj }) => {
           <input
             type="text"
             className="form-control"
-            value={titleName}
+            value={blogObj.Title}
             onChange={handleChange}
             name="titleName"
           />
@@ -72,7 +71,7 @@ export const EditBlogs = ({ modal, toggle, updateTask, blogObj }) => {
       <ModalFooter>
         <Button color="primary" onClick={handleUpdate}>
           Update
-        </Button>{" "}
+        </Button>
         <Button color="secondary" onClick={toggle}>
           Cancel
         </Button>

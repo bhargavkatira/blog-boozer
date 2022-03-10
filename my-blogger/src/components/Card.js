@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-
+import { CreateBlogs } from "../modals/CreateBlogs";
 const Card = ({ blogObj, index, deleteTask, updateListArray }) => {
   const [modal, setModal] = useState(false);
 
@@ -30,17 +30,11 @@ const Card = ({ blogObj, index, deleteTask, updateListArray }) => {
     setModal(!modal);
   };
 
-  const updateTask = (obj) => {
-    updateListArray(obj, index);
-  };
-
-  const handleDelete = () => {
-    deleteTask(index);
-  };
-
-  console.log("hello", blogObj);
   return (
-    <div class="card-wrapper mr-5">
+    <div
+      class="card-wrapper mr-5"
+      style={{ marginLeft: "50px", height: "60%" }}
+    >
       <div
         class="card-top"
         style={{ "background-color": colors[index % 5].primaryColor }}
@@ -55,22 +49,49 @@ const Card = ({ blogObj, index, deleteTask, updateListArray }) => {
         >
           {blogObj.Title}
         </span>
-        <img className="mt-3" src={blogObj.Images} />
+        <img
+          className="mt-3"
+          src={blogObj.Images}
+          height="100px"
+          width="100px"
+        />
         <p className="mt-3">{blogObj.BlogWriter}</p>
 
-        <div style={{ position: "absolute", right: "20px", bottom: "20px" }}>
-          <i
-            class="far fa-edit mr-3"
-            style={{ color: colors[index % 5].primaryColor, cursor: "pointer" }}
-            onClick={() => setModal(true)}
-          ></i>
-          <i
+        <div style={{ flex: 0.5, right: "20px", bottom: "20px" }}>
+          <button
+            style={{
+              color: colors[index % 5].primaryColor,
+              cursor: "pointer",
+              backgroundColor: "transparent",
+            }}
+            onClick={() => {
+              setModal(true);
+            }}
+          >
+            Update
+          </button>
+          <button
             class="fas fa-trash-alt"
-            style={{ color: colors[index % 5].primaryColor, cursor: "pointer" }}
-            onClick={handleDelete}
-          ></i>
+            style={{
+              color: colors[index % 5].primaryColor,
+              cursor: "pointer",
+              backgroundColor: "transparent",
+              marginLeft: 10,
+            }}
+            onClick={() => deleteTask(index)}
+          >
+            Delete
+          </button>
         </div>
       </div>
+      <CreateBlogs
+        modal={modal}
+        toggle={toggle}
+        saveBlog={updateListArray}
+        purpose="Update"
+        taskObj={blogObj}
+        index={index}
+      />
     </div>
   );
 };

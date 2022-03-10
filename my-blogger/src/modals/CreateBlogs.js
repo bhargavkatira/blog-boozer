@@ -1,7 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 
-export const CreateBlogs = ({ modal, toggle, saveBlog }) => {
+export const CreateBlogs = ({
+  modal,
+  toggle,
+  saveBlog,
+  purpose,
+  taskObj = {},
+  index,
+}) => {
   const [titleName, setTitleName] = useState("");
   const [images, setImages] = useState(null);
   const [blogWriter, setBlogWriter] = useState("");
@@ -20,6 +27,14 @@ export const CreateBlogs = ({ modal, toggle, saveBlog }) => {
   };
 
   useEffect(() => {
+    if (purpose === "Update") {
+      setTitleName(taskObj.Title);
+      setBlogWriter(taskObj.BlogWriter);
+      setImageUrl(taskObj.Images);
+    }
+  }, []);
+
+  useEffect(() => {
     if (images != null) {
       const imgUrl = URL.createObjectURL(images[0]);
       setImageUrl(imgUrl);
@@ -28,11 +43,12 @@ export const CreateBlogs = ({ modal, toggle, saveBlog }) => {
 
   const handleSave = (e) => {
     e.preventDefault();
-    let taskObj = {};
-    taskObj["Title"] = titleName;
-    taskObj["BlogWriter"] = blogWriter;
-    taskObj["Images"] = imageUrl;
-    saveBlog(taskObj);
+    let tempObj = {};
+    tempObj["Title"] = titleName;
+    tempObj["BlogWriter"] = blogWriter;
+    tempObj["Images"] = imageUrl;
+    if (purpose === "Update") saveBlog(tempObj, index, toggle);
+    else saveBlog(tempObj);
   };
   return (
     <Modal isOpen={modal} toggle={toggle}>
@@ -53,7 +69,6 @@ export const CreateBlogs = ({ modal, toggle, saveBlog }) => {
           <input
             type="file"
             className="form-control"
-            // value={images}
             onChange={handleChange}
             name="images"
           />
@@ -72,8 +87,8 @@ export const CreateBlogs = ({ modal, toggle, saveBlog }) => {
       </ModalBody>
       <ModalFooter>
         <Button color="primary" onClick={handleSave}>
-          Create
-        </Button>{" "}
+          {purpose}
+        </Button>
         <Button onClick={toggle}>Cancel</Button>
       </ModalFooter>
     </Modal>

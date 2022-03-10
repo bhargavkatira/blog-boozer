@@ -21,17 +21,27 @@ export const Blogger = () => {
     }
   }, []);
   const saveBlog = (blogObj) => {
-    // let tempList = [bloggerList];
-    // tempList.push(blogObj);
     setBloggerList((prep) => {
       return [...prep, blogObj];
     });
     setModal(false);
-    setBloggerList(bloggerList);
   };
-    useEffect(() => {
-     
-  }, [])
+
+  const deleteTask = (index) => {
+    let tempList = [...bloggerList];
+    tempList.splice(index, 1);
+    localStorage.setItem("taskList", JSON.stringify(tempList));
+    setBloggerList(tempList);
+  };
+
+  const updateListArray = (obj, index, toggle) => {
+    console.log(obj);
+    let tempList = [...bloggerList];
+    tempList[index] = obj;
+    localStorage.setItem("bloggerList", JSON.stringify(tempList));
+    setBloggerList(tempList);
+    toggle();
+  };
   return (
     <>
       <div className="header text-center">
@@ -41,9 +51,22 @@ export const Blogger = () => {
       </div>
       <div className="task-container">
         {bloggerList.length > 0 &&
-          bloggerList.map((obj, index) => <Card blogObj={obj} index={index} />)}
+          bloggerList.map((obj, index) => (
+            <Card
+              blogObj={obj}
+              index={index}
+              deleteTask={deleteTask}
+              updateListArray={updateListArray}
+              key={`${obj.Title}${index}`}
+            />
+          ))}
       </div>
-      <CreateBlogs toggle={toggle} modal={modal} saveBlog={saveBlog} />
+      <CreateBlogs
+        toggle={toggle}
+        modal={modal}
+        saveBlog={saveBlog}
+        purpose="Create"
+      />
     </>
   );
 };
